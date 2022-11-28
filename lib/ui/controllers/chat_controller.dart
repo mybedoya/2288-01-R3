@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 
 import '../../data/model/message.dart';
+//vamos
 
 // En este controlador manejamos los mensajes entre el usuario logeado y el seleccionado
 class ChatController extends GetxController {
