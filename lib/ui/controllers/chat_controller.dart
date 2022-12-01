@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 
 import '../../data/model/message.dart';
-//vamos
 
 // En este controlador manejamos los mensajes entre el usuario logeado y el seleccionado
 class ChatController extends GetxController {
@@ -33,14 +32,24 @@ class ChatController extends GetxController {
     String chatKey = getChatKey(authenticationController.getUid(), uidUser);
 
     // TODO
-    // newEntryStreamSubscription = databaseReference - child msg - child chatKey - listen
+    newEntryStreamSubscription = databaseReference
+        .child("msg")
+        .child(chatKey)
+        .onChildAdded
+        .listen(_onEntryAdded);
 
     // TODO
-    //  updateEntryStreamSubscription = databaseReference - child msg - child chatKey - listen
+    updateEntryStreamSubscription = databaseReference
+        .child("msg")
+        .child(chatKey)
+        .onChildChanged
+        .listen(_onEntryChanged);
   }
 
   // método en el que cerramos los streams
   void unsubscribe() {
+    newEntryStreamSubscription.cancel();
+    updateEntryStreamSubscription.cancel();
     //TODO
     // cancelar las subscripciones a los streams
   }
@@ -93,7 +102,11 @@ class ChatController extends GetxController {
     String senderUid = authenticationController.getUid();
     try {
       // TODO
-      // databaseReference - child('msg') - child(key) - push() - set({'senderUid': senderUid, 'msg': msg})
+      databaseReference
+          .child('msg')
+          .child(key)
+          .push()
+          .set({'senderUid': senderUid, 'msg': msg});
     } catch (error) {
       logError(error);
       return Future.error(error);
